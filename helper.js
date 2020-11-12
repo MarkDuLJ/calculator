@@ -4,7 +4,7 @@ const DIGIT = "0123456789";
 const ADD = 1;
 const MULTIPLY = 3;
 
-const isAlpha = (char) => /[A-Za-z]/gi.test(char);
+const isAlpha = (char) => /[A-Z]/gi.test(char);
 // const isAlpha = (c) => {
 //   if (c >= "a" && c <= "z") {
 //     return true;
