@@ -20,9 +20,13 @@ if (input.length > 0) {
 
     const opArr = [];
     const argsArr = [];
-    //start recursion
-    calcGroup(command, opArr, argsArr, 0);
-    console.log(calcEquation(opArr, argsArr));
+    try {
+      //start recursion
+      calcGroup(command, opArr, argsArr, 0);
+      console.log(calcEquation(opArr, argsArr));
+    } catch (err) {
+      console.log(`Error: ${err.message}`);
+    }
   }
 } else {
   console.log("argument is needed");

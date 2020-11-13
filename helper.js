@@ -1,19 +1,10 @@
 const DIGIT = "0123456789";
 
 //more operators can add here
-const ADD = 1;
-const MULTIPLY = 3;
+const ADD = "add";
+const MULTIPLY = "multiply";
 
 const isAlpha = (char) => /[A-Z]/gi.test(char);
-// const isAlpha = (c) => {
-//   if (c >= "a" && c <= "z") {
-//     return true;
-//   }
-//   if (c >= "A" && c <= "Z") {
-//     return true;
-//   }
-//   return false;
-// };
 const isOpenParenthese = (char) => char.startsWith("(");
 const isCloseParenthese = (char) => char.startsWith(")");
 const isAdd = (str) => str.toLowerCase().startsWith(ADD);
@@ -64,14 +55,16 @@ const findOperator = (str, start) => {
 
   if (flagAlpha) {
     let substr = str.substring(start, i);
-    if (substr.toLowerCase() === "add") {
+    console.log(`find operator: ${start}`);
+    if (substr.toLowerCase() === ADD) {
       result.operator = ADD;
-    } else if (substr.toLowerCase() === "multiply") {
+    } else if (substr.toLowerCase() === MULTIPLY) {
       result.operator = MULTIPLY;
+    } else {
+      throw new Error(`unrecognized operator: ${substr}`);
     }
   }
   result.start = i;
-  // console.log(result);
   return result;
 };
 
@@ -92,9 +85,9 @@ function calcGroup(str, opArr, argsArr, start) {
       argsArr.push(parseInt(str.substring(numberStart, i)));
     } else {
       let result = findOperator(str, i);
-      //   console.log(result);
       if (result.operator != null) {
         opArr.push(result.operator);
+        i = result.start;
       } else if (isOpenParenthese(str[i])) {
         let currOperator = [];
         let currArgs = [];
@@ -107,6 +100,7 @@ function calcGroup(str, opArr, argsArr, start) {
       i++;
     }
   }
+  // console.log(i);
   return i;
 }
 
