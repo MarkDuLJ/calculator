@@ -1,34 +1,14 @@
-const { calcGroup, calcEquation, onlyDigit } = require("./helper");
-// Parenthesis will always be balanced.
-// Only the add and multiply functions will be called.
-// There will always be a single space between the function arguments.
+const { calcGroup, calcEquation, findEquation } = require("./helper");
 
-//get input args
-const input = process.argv.slice(2);
+const opArr = [];
+const argsArr = [];
+try {
+  //start recursion
+  const command = findEquation();
+  console.log(`INPUT: ${command}`);
 
-if (input.length > 0) {
-  if (onlyDigit(input[0])) {
-    console.log(input[0]);
-  } else {
-    const command = input[0].trim();
-    // console.log(command);
-    if (command[0] !== "(") {
-      console.log(
-        "the command is invalid, must start with an open parenthesis"
-      );
-    }
-
-    const opArr = [];
-    const argsArr = [];
-    try {
-      //start recursion
-      calcGroup(command, opArr, argsArr, 0);
-      console.log(calcEquation(opArr, argsArr));
-    } catch (err) {
-      console.log(`Error: ${err.message}`);
-    }
-  }
-} else {
-  console.log("argument is needed");
-  //   throw new Error("argument is needed");
+  calcGroup(command, opArr, argsArr, 0);
+  console.log(`OUTPUT: ${calcEquation(opArr, argsArr)}`);
+} catch (err) {
+  console.log(`Error: ${err.message}`);
 }

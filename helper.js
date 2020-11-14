@@ -15,27 +15,27 @@ const calcEquation = (opArr, argsArr) => {
   let result = argsArr.pop();
 
   while (argsArr.length > 0) {
-    if (operator == ADD) {
-      result += argsArr.pop();
-    } else if (operator == MULTIPLY) {
-      result *= argsArr.pop();
-    }
-
-    //infinite loop? why?
-    // switch (operator) {
-    //   //add more operations here
-    //   case ADD:
-    //     result += argsArr.pop();
-    //     break;
-
-    //   case MULTIPLY:
-    //     result *= argsArr.pop();
-    //     break;
-
-    //   default:
-    //     console.log("unrecognized operator");
-    //     break;
+    // if (operator == ADD) {
+    //   result += argsArr.pop();
+    // } else if (operator == MULTIPLY) {
+    //   result *= argsArr.pop();
     // }
+
+    switch (operator) {
+      //add more operations here
+      case ADD:
+        result += argsArr.pop();
+        break;
+
+      case MULTIPLY:
+        result *= argsArr.pop();
+        break;
+
+      //should not be here anyway, just in case
+      default:
+        throw new Error(`unrecognized operator: ${operator}`);
+        break;
+    }
   }
 
   return result;
@@ -55,7 +55,7 @@ const findOperator = (str, start) => {
 
   if (flagAlpha) {
     let substr = str.substring(start, i);
-    console.log(`find operator: ${start}`);
+    // console.log(`find operator postion: ${start}`);
     if (substr.toLowerCase() === ADD) {
       result.operator = ADD;
     } else if (substr.toLowerCase() === MULTIPLY) {
@@ -68,7 +68,7 @@ const findOperator = (str, start) => {
   return result;
 };
 
-function calcGroup(str, opArr, argsArr, start) {
+const calcGroup = (str, opArr, argsArr, start) => {
   let i = start;
 
   while (i < str.length) {
@@ -81,7 +81,6 @@ function calcGroup(str, opArr, argsArr, start) {
       }
     }
     if (flagNum) {
-      //   console.log(str.substring(numberStart, i));
       argsArr.push(parseInt(str.substring(numberStart, i)));
     } else {
       let result = findOperator(str, i);
@@ -100,9 +99,31 @@ function calcGroup(str, opArr, argsArr, start) {
       i++;
     }
   }
-  // console.log(i);
   return i;
-}
+};
+
+const findEquation = () => {
+  const input = process.argv.slice(2);
+  const command = input[0].trim();
+
+  if (input.length > 0) {
+    if (onlyDigit(input[0])) {
+      console.log(input[0]);
+    } else {
+      if (!isOpenParenthese(command[0])) {
+        throw new Error(
+          "the command is invalid, must start with an open parenthesis"
+        );
+      }
+    }
+  } else {
+    throw new Error(
+      "argument is needed, format likes node calc.js '(add 1 2)' "
+    );
+  }
+
+  return command;
+};
 
 module.exports = {
   isAlpha,
@@ -114,4 +135,5 @@ module.exports = {
   calcEquation,
   findOperator,
   calcGroup,
+  findEquation,
 };
