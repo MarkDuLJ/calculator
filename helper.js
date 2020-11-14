@@ -1,15 +1,29 @@
 const DIGIT = "0123456789";
 
 //more operators can add here
+//for calc.js
 const ADD = "add";
 const MULTIPLY = "multiply";
 
+//for newIdea.js
+const PLUS = 1;
+const TIME = 2;
+
 const isAlpha = (char) => /[A-Z]/gi.test(char);
-const isOpenParenthese = (char) => char.startsWith("(");
-const isCloseParenthese = (char) => char.startsWith(")");
-const isAdd = (str) => str.toLowerCase().startsWith(ADD);
-const isMultiply = (str) => str.toLowerCase().startsWith(MULTIPLY);
+const isOpenParenthese = (char) => char === "(";
+const isCloseParenthese = (char) => char === ")";
+const isAdd = (str) => str.toLowerCase() === ADD;
+const isMultiply = (str) => str.toLowerCase() === MULTIPLY;
 const onlyDigit = (str) => [...str].every((c) => DIGIT.includes(c));
+const isOperator = (str) => {
+  if (str.toLowerCase() === "add") {
+    return PLUS;
+  }
+  if (str.toLowerCase() === "multiply") {
+    return TIME;
+  }
+  return -1;
+};
 
 // real part for calculation
 const calcEquation = (opArr, argsArr) => {
@@ -121,6 +135,79 @@ const findEquation = () => {
   return command;
 };
 
+// calcate each whole equation and store result into stack
+const findGroup = (operatorsArr, argsArr) => {
+  let operator = operatorsArr.pop();
+  let output = argsArr.pop();
+  if (isOpenParenthese(output)) {
+    return;
+  }
+  let result = parseInt(output);
+
+  let num;
+  let op = operator === PLUS ? "+" : "*";
+  while (!isOpenParenthese((num = argsArr.pop()))) {
+    // let xxx = result;
+    result = calcResult(operator, parseInt(num), result);
+    // console.log(`result:  ${result} = ${xxx} ${op} ${num} `);
+  }
+  if (result) {
+    argsArr.push(result);
+  }
+};
+
+// treat result with operators, can add more functions here
+const calcResult = (operator, num1, num2) => {
+  if (operator === PLUS) {
+    return num1 + num2;
+  } else if (operator === TIME) {
+    return num1 * num2;
+  } else {
+    throw new Error(
+      `operation failed: operator ${operator} with arguments ${num1} and ${num2}`
+    );
+  }
+};
+
+// search every char in input string and store into stack
+const calculate = (str, operatorsArr, argsArr) => {
+  let i = 0;
+  while (i < str.length) {
+    let c = str[i];
+
+    if (c === " ") {
+      i++;
+    } else if (isAlpha(str[i])) {
+      let start = i;
+      i++;
+      while (i < str.length && isAlpha(str[i])) {
+        i++;
+      }
+      let operator = isOperator(str.substring(start, i));
+      if (operator < 1) {
+        throw new Error(`unrecognized operator: ${operator}`);
+      }
+      operatorsArr.push(operator);
+    } else if (onlyDigit(c)) {
+      let start = i;
+      i++;
+      while (i < str.length && onlyDigit(str[i])) {
+        i++;
+      }
+      argsArr.push(str.substring(start, i));
+    } else if (c === "(") {
+      i++;
+      argsArr.push(c);
+    } else if (c === ")") {
+      i++;
+
+      findGroup(operatorsArr, argsArr);
+    } else {
+      i++;
+    }
+  }
+};
+
 module.exports = {
   isAlpha,
   isOpenParenthese,
@@ -132,4 +219,5 @@ module.exports = {
   findOperator,
   calcGroup,
   findEquation,
+  calculate,
 };

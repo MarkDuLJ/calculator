@@ -7,7 +7,10 @@
 
 ### Instruction
 
-There's helper.js file to warp all the needed functions and calc.js to carry out main logic.
+helper.js file to warp all the needed functions
+calc.js is orignal logic with recursion
+newIdea.js gets a good idea from a neat Java code on
+https://www.jiuzhang.com/problem/basic-calculator-iii#tag-lang-java
 
 Code can run without modification.
 
@@ -61,3 +64,6 @@ node calc.js '(MultipLY 2 (ADD 1 (multiply 1 1) 2) (add (MULTIPLY 2 2) (add 1 1
 
     - more white spaces
       node calc.js '( ADD    1 2    3   4)  'no first parentheses: node calc.js 'ADD    1 2    3   4)  '
+
+    - unbalanced parentheses
+      node newIdea.js 'Add 1 3 2)'
