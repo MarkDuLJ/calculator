@@ -10,19 +10,15 @@ const isCloseParenthese = (char) => char.startsWith(")");
 const isAdd = (str) => str.toLowerCase().startsWith(ADD);
 const isMultiply = (str) => str.toLowerCase().startsWith(MULTIPLY);
 const onlyDigit = (str) => [...str].every((c) => DIGIT.includes(c));
+
+// real part for calculation
 const calcEquation = (opArr, argsArr) => {
   let operator = opArr.pop();
   let result = argsArr.pop();
 
   while (argsArr.length > 0) {
-    // if (operator == ADD) {
-    //   result += argsArr.pop();
-    // } else if (operator == MULTIPLY) {
-    //   result *= argsArr.pop();
-    // }
-
+    //add more operations here
     switch (operator) {
-      //add more operations here
       case ADD:
         result += argsArr.pop();
         break;
@@ -34,14 +30,13 @@ const calcEquation = (opArr, argsArr) => {
       //should not be here anyway, just in case
       default:
         throw new Error(`unrecognized operator: ${operator}`);
-        break;
     }
   }
 
   return result;
 };
 
-//find operator and position
+//find operator and index position
 const findOperator = (str, start) => {
   let result = {};
   let i = start;
@@ -55,7 +50,6 @@ const findOperator = (str, start) => {
 
   if (flagAlpha) {
     let substr = str.substring(start, i);
-    // console.log(`find operator postion: ${start}`);
     if (substr.toLowerCase() === ADD) {
       result.operator = ADD;
     } else if (substr.toLowerCase() === MULTIPLY) {
@@ -68,6 +62,7 @@ const findOperator = (str, start) => {
   return result;
 };
 
+// sort all the available equations and store to stack
 const calcGroup = (str, opArr, argsArr, start) => {
   let i = start;
 
@@ -102,23 +97,24 @@ const calcGroup = (str, opArr, argsArr, start) => {
   return i;
 };
 
+// treat input
 const findEquation = () => {
   const input = process.argv.slice(2);
-  const command = input[0].trim();
+  const command = input[0];
 
   if (input.length > 0) {
-    if (onlyDigit(input[0])) {
-      console.log(input[0]);
+    if (onlyDigit(command)) {
+      return command;
     } else {
-      if (!isOpenParenthese(command[0])) {
+      if (!isOpenParenthese(command.trim()[0])) {
         throw new Error(
-          "the command is invalid, must start with an open parenthesis"
+          "the command is invalid, must start with an open parenthese"
         );
       }
     }
   } else {
     throw new Error(
-      "argument is needed, format likes node calc.js '(add 1 2)' "
+      "argument is needed, format likes node calc.js '(add 1 2)'  or node calc.js 123"
     );
   }
 

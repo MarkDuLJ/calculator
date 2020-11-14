@@ -1,8 +1,21 @@
 ### Precondition:
 
-    -Parenthesis will always be balanced.
-    -Only the add and multiply functions will be called.
-    -There will always be a single space between the function arguments.
+    - Parenthesis will always be balanced.
+    - Only the add and multiply functions will be called.
+    - There will always be a single space between the function arguments.
+    - Don't have to deal with inputting negative numbers
+
+### Instruction
+
+There's helper.js file to warp all the needed functions and calc.js to carry out main logic.
+
+Code can run without modification.
+
+Code can support an arbitrary number of arguments.
+
+Code can add more operation functions easily.
+
+Code can treat malformed expressions very well.
 
 ### Scipt Format
 
